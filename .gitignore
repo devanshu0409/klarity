@@ -1,0 +1,8 @@
+node_modules/
+out/
+dist/
+*.log
+.DS_Store
+.vite/
+resources/flatc/**/flatc
+resources/flatc/**/flatc.exe

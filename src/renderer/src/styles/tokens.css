@@ -1,0 +1,314 @@
+/*
+ * Design tokens, adapted from DESIGN.md (Mastercard-derived: warm cream
+ * canvas, ink-black primary actions, committed radius tiers, soft large-spread
+ * shadows, weight-450 body type) for a dense desktop data tool.
+ *
+ * What carried over: the warm-cream-over-white canvas, ink black as the
+ * primary-action color (which frees the brand red to be a true signal color —
+ * focus, active state, badges — exactly as the source doc reserves its accent
+ * orange for consent/signal only), a committed two-tier radius scale instead
+ * of a generic 8/12 middle ground, atmospheric low-opacity shadows instead of
+ * hard drop shadows, and weight-450 body copy with tight heading tracking.
+ *
+ * What did not: circular portraits, orbital connector arcs, satellite CTAs,
+ * ghost-watermark headlines, stadium hero frames, floating pill nav. Those are
+ * marketing-page motifs with no analogue in a table-and-dialog tool, so they
+ * are left out rather than forced in.
+ *
+ * Every color in the app resolves through these — components never hardcode a
+ * hex value, so a theme change is a single palette swap.
+ *
+ * Theme resolution has three states:
+ *   bare :root                      -> light palette (the default)
+ *   prefers-color-scheme: dark      -> dark, unless the user forced light
+ *   [data-theme="light"|"dark"]     -> explicit user choice, wins over the media query
+ */
+
+:root {
+  /* --- surfaces: warm cream canvas, not cool slate --------------------- */
+  --bg-app: #f3f0ee;
+  --bg-surface: #fcfbfa;
+  --bg-raised: #ffffff;
+  --bg-sunken: #ece7e2;
+  --bg-hover: #ece7e2;
+  --bg-active: #e3dcd5;
+  --bg-rail: #fcfbfa;
+  --bg-overlay: rgb(20 20 19 / 0.4);
+
+  /* --- borders -------------------------------------------------------- */
+  --border: #e2dcd4;
+  --border-strong: #c9c0b5;
+  --border-focus: #ea2e12;
+
+  /* --- text: ink black, not cool gray ----------------------------------- */
+  --text-primary: #141413;
+  --text-secondary: #444341;
+  --text-muted: #6f6b66;
+  --text-inverted: #f3f0ee;
+
+  /* --- accent (brand red): reserved for signal, never primary-action fill.
+     Ink black carries the primary CTA instead — see --btn-primary-*. ------ */
+  --accent: #ea2e12;
+  --accent-hover: #c8240b;
+  --accent-subtle: #fdeae6;
+  --accent-text: #b81f08;
+  --on-accent: #ffffff;
+  --brand: #ea2e12;
+
+  /* --- primary action: ink pill on cream (light) ----------------------- */
+  --btn-primary-bg: #141413;
+  --btn-primary-bg-hover: #262624;
+  --btn-primary-text: #f3f0ee;
+
+  /* --- status --------------------------------------------------------- */
+  --ok: #157f4a;
+  --ok-subtle: #e3f5eb;
+  --warn: #a35f06;
+  --warn-subtle: #fdf1dc;
+  /* Deliberately darker than --accent so a destructive control never reads as
+     the ordinary primary action. */
+  --danger: #9b1006;
+  --danger-subtle: #fbe4e1;
+  --info: #1a5fb4;
+  --info-subtle: #e6eefb;
+
+  /* --- decode-format badges ------------------------------------------- */
+  --fmt-json: #1a5fb4;
+  --fmt-json-bg: #e6eefb;
+  --fmt-protobuf: #6b3fa0;
+  --fmt-protobuf-bg: #f0e9f9;
+  --fmt-flatbuffers: #0f766e;
+  --fmt-flatbuffers-bg: #dff3f0;
+  --fmt-avro: #8a5a00;
+  --fmt-avro-bg: #fbf0d9;
+  --fmt-string: #444341;
+  --fmt-string-bg: #ece7e2;
+  /* Numbers read as data, not prose: a cooler tone than the neutral string chip. */
+  --fmt-number: #0f5c6b;
+  --fmt-number-bg: #dff0f3;
+  --fmt-raw: #6f6b66;
+  --fmt-raw-bg: #e2dcd4;
+  --fmt-error: #9b1006;
+  --fmt-error-bg: #fbe4e1;
+
+  /* --- cluster chips (guards against acting on the wrong cluster) ------ */
+  --cluster-slate: #64748b;
+  --cluster-blue: #2563eb;
+  --cluster-green: #16a34a;
+  --cluster-amber: #d97706;
+  --cluster-red: #ea2e12;
+  --cluster-purple: #9333ea;
+  --cluster-teal: #0d9488;
+
+  /* --- charts (ordered series palette) -------------------------------- */
+  --chart-1: #ea2e12;
+  --chart-2: #0f766e;
+  --chart-3: #6b3fa0;
+  --chart-4: #157f4a;
+  --chart-5: #1a5fb4;
+  --chart-grid: #e2dcd4;
+  --chart-axis: #6f6b66;
+
+  /* --- elevation: atmospheric, large-spread, low-opacity — never a hard
+     directional drop shadow. Scaled down from the source doc's page-scale
+     numbers (24-110px spread) to compact UI chrome. ---------------------- */
+  --shadow-sm: 0 2px 8px rgb(20 20 19 / 0.05);
+  --shadow-md: 0 8px 24px rgb(20 20 19 / 0.08);
+  --shadow-lg: 0 20px 48px rgb(20 20 19 / 0.12);
+
+  /* --- shape: a committed two-tier scale (structural chrome / pill), not a
+     generic 8-12px middle ground. ----------------------------------------- */
+  --radius-sm: 5px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --duration-fast: 90ms;
+  --duration: 160ms;
+
+  /* --- density (row height swaps with the compact toggle) ------------- */
+  --row-height: 34px;
+  --row-padding-y: 7px;
+  --font-ui: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Fira Code Variable', 'Fira Code', ui-monospace, 'Cascadia Mono', monospace;
+
+  /* --- typography rhythm: 450 body weight (the load-bearing choice — softer
+     than 400, firmer than 500), tight -2% tracking on headings. ---------- */
+  --weight-body: 450;
+  --weight-heading: 550;
+  --tracking-heading: -0.02em;
+  --tracking-eyebrow: 0.04em;
+
+  color-scheme: light;
+}
+
+/* System preference is dark and the user has not forced light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg-app: #131314;
+    --bg-surface: #1a1b1d;
+    --bg-raised: #212224;
+    --bg-sunken: #0e0e0f;
+    --bg-hover: #26272a;
+    --bg-active: #303134;
+    --bg-rail: #161617;
+    --bg-overlay: rgb(0 0 0 / 0.62);
+
+    --border: #2a2b2e;
+    --border-strong: #3c3d41;
+    --border-focus: #ff5a3d;
+
+    --text-primary: #edeeef;
+    --text-secondary: #a8a9ad;
+    --text-muted: #76777b;
+    --text-inverted: #131314;
+
+    --accent: #ff5a3d;
+    --accent-hover: #ff7b63;
+    --accent-subtle: #3a1409;
+    --accent-text: #ff8060;
+    --on-accent: #1a0500;
+    --brand: #ff5a3d;
+
+    /* The canvas is already ink-dark, so the primary pill inverts: a light
+       fill is what now reads as "the one solid, confident surface" — same
+       role the ink pill plays on the cream canvas. */
+    --btn-primary-bg: #edeeef;
+    --btn-primary-bg-hover: #ffffff;
+    --btn-primary-text: #131314;
+
+    --ok: #3fbf7f;
+    --ok-subtle: #10291d;
+    --warn: #e0a339;
+    --warn-subtle: #2d2110;
+    --danger: #ff4d4d;
+    --danger-subtle: #35110f;
+    --info: #64a2f5;
+    --info-subtle: #12203a;
+
+    --fmt-json: #64a2f5;
+    --fmt-json-bg: #12203a;
+    --fmt-protobuf: #c09af0;
+    --fmt-protobuf-bg: #241a35;
+    --fmt-flatbuffers: #4fd1c5;
+    --fmt-flatbuffers-bg: #0f2b2a;
+    --fmt-avro: #e8b45c;
+    --fmt-avro-bg: #2b2110;
+    --fmt-string: #a8a9ad;
+    --fmt-string-bg: #26272a;
+    --fmt-number: #63c6d8;
+    --fmt-number-bg: #10262b;
+    --fmt-raw: #76777b;
+    --fmt-raw-bg: #1e1f21;
+    --fmt-error: #ff4d4d;
+    --fmt-error-bg: #35110f;
+
+    --cluster-slate: #94a3b8;
+    --cluster-blue: #60a5fa;
+    --cluster-green: #4ade80;
+    --cluster-amber: #fbbf24;
+    --cluster-red: #ff5a3d;
+    --cluster-purple: #c084fc;
+    --cluster-teal: #2dd4bf;
+
+    --chart-1: #ff5a3d;
+    --chart-2: #4fd1c5;
+    --chart-3: #c09af0;
+    --chart-4: #3fbf7f;
+    --chart-5: #64a2f5;
+    --chart-grid: #2a2b2e;
+    --chart-axis: #76777b;
+
+    --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.35);
+    --shadow-md: 0 8px 24px rgb(0 0 0 / 0.42);
+    --shadow-lg: 0 20px 48px rgb(0 0 0 / 0.55);
+
+    color-scheme: dark;
+  }
+}
+
+/* Explicit dark, regardless of system preference. Values must stay in sync
+   with the media-query block above. */
+:root[data-theme='dark'] {
+  --bg-app: #131314;
+  --bg-surface: #1a1b1d;
+  --bg-raised: #212224;
+  --bg-sunken: #0e0e0f;
+  --bg-hover: #26272a;
+  --bg-active: #303134;
+  --bg-rail: #161617;
+  --bg-overlay: rgb(0 0 0 / 0.62);
+
+  --border: #2a2b2e;
+  --border-strong: #3c3d41;
+  --border-focus: #ff5a3d;
+
+  --text-primary: #edeeef;
+  --text-secondary: #a8a9ad;
+  --text-muted: #76777b;
+  --text-inverted: #131314;
+
+  --accent: #ff5a3d;
+  --accent-hover: #ff7b63;
+  --accent-subtle: #3a1409;
+  --accent-text: #ff8060;
+  --on-accent: #1a0500;
+  --brand: #ff5a3d;
+
+  --btn-primary-bg: #edeeef;
+  --btn-primary-bg-hover: #ffffff;
+  --btn-primary-text: #131314;
+
+  --ok: #3fbf7f;
+  --ok-subtle: #10291d;
+  --warn: #e0a339;
+  --warn-subtle: #2d2110;
+  --danger: #ff4d4d;
+  --danger-subtle: #35110f;
+  --info: #64a2f5;
+  --info-subtle: #12203a;
+
+  --fmt-json: #64a2f5;
+  --fmt-json-bg: #12203a;
+  --fmt-protobuf: #c09af0;
+  --fmt-protobuf-bg: #241a35;
+  --fmt-flatbuffers: #4fd1c5;
+  --fmt-flatbuffers-bg: #0f2b2a;
+  --fmt-avro: #e8b45c;
+  --fmt-avro-bg: #2b2110;
+  --fmt-string: #a8a9ad;
+  --fmt-string-bg: #26272a;
+  --fmt-number: #63c6d8;
+  --fmt-number-bg: #10262b;
+  --fmt-raw: #76777b;
+  --fmt-raw-bg: #1e1f21;
+  --fmt-error: #ff4d4d;
+  --fmt-error-bg: #35110f;
+
+  --cluster-slate: #94a3b8;
+  --cluster-blue: #60a5fa;
+  --cluster-green: #4ade80;
+  --cluster-amber: #fbbf24;
+  --cluster-red: #ff5a3d;
+  --cluster-purple: #c084fc;
+  --cluster-teal: #2dd4bf;
+
+  --chart-1: #ff5a3d;
+  --chart-2: #4fd1c5;
+  --chart-3: #c09af0;
+  --chart-4: #3fbf7f;
+  --chart-5: #64a2f5;
+  --chart-grid: #2a2b2e;
+  --chart-axis: #76777b;
+
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.42);
+  --shadow-lg: 0 20px 48px rgb(0 0 0 / 0.55);
+
+  color-scheme: dark;
+}
+
+/* Compact density shrinks table rows without touching component code. */
+:root[data-density='compact'] {
+  --row-height: 26px;
+  --row-padding-y: 3px;
+}
